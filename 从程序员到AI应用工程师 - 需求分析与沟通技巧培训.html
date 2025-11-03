@@ -384,6 +384,34 @@
             color: #888;
             font-style: italic;
         }
+
+        /* 修复Slide 25的特殊布局 */
+        .slide[data-title="AI自动生成需求文档"] .centered-content {
+            width: 100%;
+            height: 100%;
+        }
+        .slide[data-title="AI自动生成需求文档"] .card-with-aside-image {
+             height: calc(100vh - 2 * 5vh - 100px); /* 减去标题高度 */
+        }
+        .slide[data-title="AI自动生成需求文档"] .flow-card-container {
+            justify-content: flex-start;
+        }
+        .slide[data-title="AI自动生成需求文档"] .flow-step {
+            width: 100%;
+        }
+        .slide[data-title="AI自动生成需求文档"] .flow-step .card {
+            flex-grow: 1;
+            text-align: center;
+        }
+         .slide[data-title="AI自动生成需求文档"] .flow-step .arrow {
+            display: none; /* 垂直流程不需要箭头 */
+        }
+        .slide[data-title="AI自动生成需求文档"] .card-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
     </style>
 </head>
 
@@ -396,9 +424,9 @@
 
         <div id="fullscreen-toggle" title="全屏/退出全屏">⛶</div>
 
-        <div id="page-number">1 / 31</div>
+        <div id="page-number">1 / 34</div>
 
-        <div class="slide active bg-cover" data-title="封面" style="background-image: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxwaG90by1yZWxhdGVkfDE0fHx8ZW58MHx8fHx8&ixlib=rb-4.0.3&q=80&w=1920');">
+        <div class="slide active bg-cover" data-title="封面" style="background-image: url('https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');">
             <div class="overlay"></div>
             <div class="centered-content">
                 <h1>从程序员到AI应用工程师</h1>
@@ -421,7 +449,7 @@
                     </ul>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8Mnx8Z29hbHN8ZW58MHx8fHwxNzE1ODg1OTQzfDA&ixlib=rb-4.0.3&q=80&w=1080" alt="课程目标">
+                    <img src="https://images.pexels.com/photos/3184424/pexels-photo-3184424.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="课程目标">
                 </div>
             </div>
         </div>
@@ -472,7 +500,7 @@ Why 5: ... (真实需求)
                     <p><strong>启示：</strong>用AI帮你系统化思考，避免思维盲区</p>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1628124707159-55931b6c6b44?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8MXx8d2FsbnV0fGVufDB8fHx8MTcxNTg4NjE1N3ww&ixlib=rb-4.0.3&q=80&w=1080" alt="核桃">
+                    <img src="https://images.pexels.com/photos/3326103/pexels-photo-3326103.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="核桃">
                 </div>
             </div>
         </div>
@@ -485,13 +513,13 @@ Why 5: ... (真实需求)
                     <div class="card"><h3>2. 需求挖掘</h3><p>实时提供追问建议、记录要点</p></div>
                     <div class="card"><h3>3. 需求分析</h3><p>5W2H分析、KANO分类、优先级排序</p></div>
                     <div class="card"><h3>4. 需求验证</h3><p>生成确认文档、检查遗漏</p></div>
-                    <div class="card"><h3>5. 需求沟通</h3><p>话术优化、冲突调解方案</p></div>
+                    <div class="card"><h3>5. 需求沟通</h3><p>话术优化、冲突调G方案</p></div>
                     <div class="card"><h3>6. 需求管理</h3><p>变更评估、拒绝话术、文档生成</p></div>
                 </div>
             </div>
         </div>
 
-        <div class="slide bg-cover" data-title="章节页2" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8Mnx8ZGF0YSUyMGFuYWx5c2lzfGVufDB8fHx8MTcxNTg4NjIyN3ww&ixlib=rb-4.0.3&q=80&w=1920');">
+        <div class="slide bg-cover" data-title="章节页2" style="background-image: url('https://images.pexels.com/photos/326503/pexels-photo-326503.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');">
             <div class="overlay"></div>
             <div class="centered-content">
                 <h2>第二部分</h2>
@@ -525,7 +553,7 @@ Why 5: ... (真实需求)
                     </div>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1573495783078-30b35f10438b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8MTF8fGljZWJlcmd8ZW58MHx8fHwxNzE1ODg2MzI4fDA&ixlib=rb-4.0.3&q=80&w=1080" alt="需求的三个层次">
+                    <img src="https://images.pexels.com/photos/192136/pexels-photo-192136.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="需求的三个层次">
                 </div>
             </div>
         </div>
@@ -548,7 +576,7 @@ Why 5: ... (真实需求)
                     </div>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8NHx8bWluZCUyMG1hcHxlbnwwfHx8fDE3MTU4ODY0MDJ8MA&ixlib=rb-4.0.3&q=80&w=1080" alt="5W2H分析法">
+                    <img src="https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="5W2H分析法">
                 </div>
             </div>
         </div>
@@ -575,7 +603,7 @@ Why 5: ... (真实需求)
                     </ul>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1553775282-20af80779714?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8Nnx8Y2hhdGJvdHxlbnwwfHx8fDE3MTU4ODY0ODJ8MA&ixlib=rb-4.0.3&q=80&w=1080" alt="AI聊天">
+                    <img src="https://images.pexels.com/photos/8728380/pexels-photo-8728380.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="AI聊天">
                 </div>
             </div>
         </div>
@@ -594,7 +622,7 @@ Why 5: ... (真实需求)
                     <p><strong>好处：</strong>快速起草，节省80%时间，程序员不再害怕做分类</p>
                 </div>
                 <div class="aside-image">
-                    <img src="https://i.imgur.com/8Q1mHqW.png" alt="KANO模型">
+                    <img src="https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="KANO模型">
                 </div>
             </div>
         </div>
@@ -636,7 +664,7 @@ Why 5: ... (真实需求)
                     </div>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8N3x8cHJpb3JpdHl8ZW58MHx8fHwxNzE1ODg2NzQ1fDA&ixlib=rb-4.0.3&q=80&w=1080" alt="优先级">
+                    <img src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="优先级">
                 </div>
             </div>
         </div>
@@ -662,7 +690,7 @@ Why 5: ... (真实需求)
                     <p><strong>好处：</strong>规范化、业务价值清晰</p>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8MTV8fHdvcmtzaG9wfGVufDB8fHx8MTcxNTg4Njc4N3ww&ixlib=rb-4.0.3&q=80&w=1080" alt="用户故事">
+                    <img src="https://images.pexels.com/photos/3184433/pexels-photo-3184433.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="用户故事">
                 </div>
             </div>
         </div>
@@ -687,7 +715,7 @@ Why 5: ... (真实需求)
                     </ul>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8M3x8aW50ZXJ2aWV3fGVufDB8fHx8MTcxNTg4Njg1MXww&ixlib=rb-4.0.3&q=80&w=1080" alt="访谈">
+                    <img src="https://images.pexels.com/photos/3760069/pexels-photo-3760069.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="访谈">
                 </div>
             </div>
         </div>
@@ -713,7 +741,7 @@ Why 5: ... (真实需求)
                     </div>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8MTF8fGFuYWx5c2lzfGVufDB8fHx8MTcxNTg4Njk0Mnww&ixlib=rb-4.0.3&q=80&w=1080" alt="STAR分析">
+                    <img src="https://images.pexels.com/photos/4100670/pexels-photo-4100670.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="STAR分析">
                 </div>
             </div>
         </div>
@@ -738,7 +766,7 @@ Why 5: ... (真实需求)
                     </div>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1620712943543-26fc7ee3c75f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8MTZ8fGFpfGVufDB8fHx8MTcxNTg4NzAwNnww&ixlib=rb-4.0.3&q=80&w=1080" alt="AI需求">
+                    <img src="https://images.pexels.com/photos/7567443/pexels-photo-7567443.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="AI需求">
                 </div>
             </div>
         </div>
@@ -758,12 +786,12 @@ Why 5: ... (真实需求)
                     <p><strong>AI反馈：</strong>访谈结束后，让AI评价你的提问质量和改进建议</p>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1557853197-aefb056b6123?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8N3x8cm9sZXBsYXl8ZW58MHx8fHwxNzE1ODg3MDYyfDA&ixlib=rb-4.0.3&q=80&w=1080" alt="AI模拟对话">
+                    <img src="https://images.pexels.com/photos/3184460/pexels-photo-3184460.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="AI模拟对话">
                 </div>
             </div>
         </div>
 
-        <div class="slide bg-cover" data-title="章节页3" style="background-image: url('https://images.unsplash.com/photo-1554224154-26032ffc0d07?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8MTB8fGNvbW11bmljYXRpb258ZW58MHx8fHwxNzE1ODg3MDk4fDA&ixlib=rb-4.0.3&q=80&w=1920');">
+        <div class="slide bg-cover" data-title="章节页3" style="background-image: url('https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');">
             <div class="overlay"></div>
             <div class="centered-content">
                 <h2>第三部分</h2>
@@ -791,7 +819,7 @@ Why 5: ... (真实需求)
                     <p><strong>好处：</strong>专注倾听，不再担心漏记信息</p>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8NHx8b25saW5lJTIwbWVldGluZ3xlbnwwfHx8fDE3MTU4ODcxNTF8MA&ixlib=rb-4.0.3&q=80&w=1080" alt="会议记录">
+                    <img src="https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="会议记录">
                 </div>
             </div>
         </div>
@@ -814,7 +842,7 @@ Why 5: ... (真实需求)
                     <p><strong>AI可应对：</strong>话多型、沉默型、技术型、业务型</p>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8Nnx8bmVnb3RpYXRpb258ZW58MHx8fHwxNzE1ODg3MjAzfDA&ixlib=rb-4.0.3&q=80&w=1080" alt="沟通策略">
+                    <img src="https://images.pexels.com/photos/3184611/pexels-photo-3184611.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="沟通策略">
                 </div>
             </div>
         </div>
@@ -862,7 +890,7 @@ Why 5: ... (真实需求)
                     </div>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8OHx8cXVlc3Rpb258ZW58MHx8fHwxNzE1ODg3MzMyfDA&ixlib=rb-4.0.3&q=80&w=1080" alt="提问">
+                    <img src="https://images.pexels.com/photos/5668774/pexels-photo-5668774.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="提问">
                 </div>
             </div>
         </div>
@@ -887,7 +915,7 @@ Why 5: ... (真实需求)
                     </div>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1529007185502-7c6c6835d51b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8M3x8Y29uZmxpY3R8ZW58MHx8fHwxNzE1ODg3Mzc2fDA&ixlib=rb-4.0.3&q=80&w=1080" alt="冲突">
+                    <img src="https://images.pexels.com/photos/1181280/pexels-photo-1181280.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="冲突">
                 </div>
             </div>
         </div>
@@ -916,31 +944,38 @@ Why 5: ... (真实需求)
                     </div>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1522881193467-46323c396d74?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8MTF8fGJhbGFuY2V8ZW58MHx8fHwxNzE1ODg3NDEzfDA&ixlib=rb-4.0.3&q=80&w=1080" alt="期望管理">
+                    <img src="https://images.pexels.com/photos/5699475/pexels-photo-5699475.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="期望管理">
                 </div>
             </div>
         </div>
 
         <div class="slide" data-title="AI自动生成需求文档">
             <div class="centered-content">
-                <h2>AI自动生成需求文档</h2>
-                <p>程序员写文档效率低、格式不规范</p>
-                <h3>AI文档生成流程</h3>
-                <div class="flow-card-container">
-                    <div class="flow-step">
-                        <div class="card"><p><strong>第一步</strong><br>喂给AI结构化信息</p></div>
-                        <div class="arrow">→</div>
+                <h2 style="flex-shrink: 0;">AI自动生成需求文档</h2>
+                <p style="flex-shrink: 0;">程序员写文档效率低、格式不规范</p>
+                <div class="card-with-aside-image">
+                    <div class="card card-content" style="flex: 2;">
+                        <h3>AI文档生成流程</h3>
+                        <div class="flow-card-container">
+                            <div class="flow-step">
+                                <div class="card"><p><strong>第一步</strong><br>喂给AI结构化信息</p></div>
+                                <div class="arrow">→</div>
+                            </div>
+                            <div class="flow-step">
+                                <div class="card"><p><strong>第二步</strong><br>AI生成初稿</p></div>
+                                <div class="arrow">→</div>
+                            </div>
+                            <div class="flow-step">
+                                <div class="card"><p><strong>第三步</strong><br>人工审核和补充</p></div>
+                                <div class="arrow"></div>
+                            </div>
+                        </div>
+                        <h3>输出：专业规范的需求文档，30分钟 → 3分钟</h3>
                     </div>
-                    <div class="flow-step">
-                        <div class="card"><p><strong>第二步</strong><br>AI生成初稿</p></div>
-                        <div class="arrow">→</div>
-                    </div>
-                    <div class="flow-step">
-                        <div class="card"><p><strong>第三步</strong><br>人工审核和补充</p></div>
-                        <div class="arrow"></div>
+                    <div class="aside-image" style="flex: 1;">
+                        <img src="https://images.pexels.com/photos/1181678/pexels-photo-1181678.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="AI生成文档">
                     </div>
                 </div>
-                <h3>输出：专业规范的需求文档，30分钟 → 3分钟</h3>
             </div>
         </div>
 
@@ -969,12 +1004,12 @@ Why 5: ... (真实需求)
                     </div>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1543286386-713bdd548da4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8NHx8dHJhbnNsYXRlfGVufDB8fHx8MTcxNTg4NzUxMHww&ixlib=rb-4.0.3&q=80&w=1080" alt="多语言沟通">
+                    <img src="https://images.pexels.com/photos/3184423/pexels-photo-3184423.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="多语言沟通">
                 </div>
             </div>
         </div>
 
-        <div class="slide bg-cover" data-title="章节页4" style="background-image: url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8M3x8cHJvamVjdCUyMG1hbmFnZW1lbnR8ZW58MHx8fHwxNzE1ODg3NTQxfDA&ixlib=rb-4.0.3&q=80&w=1920');">
+        <div class="slide bg-cover" data-title="章节页4" style="background-image: url('https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');">
             <div class="overlay"></div>
             <div class="centered-content">
                 <h2>第四部分</h2>
@@ -1002,7 +1037,7 @@ Why 5: ... (真实需求)
                     </div>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8MTR8fHByb2plY3QlMjBtYW5hZ2VtZW50fGVufDB8fHx8MTcxNTg4NzYwNnww&ixlib=rb-4.0.3&q=80&w=1080" alt="需求蔓延">
+                    <img src="https://images.pexels.com/photos/3184287/pexels-photo-3184287.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="需求蔓延">
                 </div>
             </div>
         </div>
@@ -1029,7 +1064,7 @@ Why 5: ... (真实需求)
                     </div>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1542626991-cbc4e32524cc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8Nnx8cmlza3xlbnwwfHx8fDE3MTU4ODc2NTV8MA&ixlib=rb-4.0.3&q=80&w=1080" alt="影响分析">
+                    <img src="https://images.pexels.com/photos/1181292/pexels-photo-1181292.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="影响分析">
                 </div>
             </div>
         </div>
@@ -1055,7 +1090,7 @@ Why 5: ... (真实需求)
                     <p><strong>好处：</strong>从手工30分钟缩短到3分钟</p>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8N3x8ZG9jdW1lbnR8ZW58MHx8fHwxNzE1ODg3NzA4fDA&ixlib=rb-4.0.3&q=80&w=1080" alt="文档">
+                    <img src="https://images.pexels.com/photos/1181316/pexels-photo-1181316.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="文档">
                 </div>
             </div>
         </div>
@@ -1102,7 +1137,7 @@ Why 5: ... (真实需求)
                     <p><strong>可视化：</strong>AI生成表格，可直接放入汇报文档</p>
                 </div>
                 <div class="aside-image">
-                    <img src="https://i.imgur.com/3Z6p3Jc.png" alt="优先级矩阵">
+                    <img src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="优先级矩阵">
                 </div>
             </div>
         </div>
@@ -1131,12 +1166,12 @@ Why 5: ... (真实需求)
                     </ul>
                 </div>
                 <div class="aside-image">
-                    <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8M3x8dGVjaG5vbG9neXxlbnwwfHx8fDE3MTU4ODc4ODJ8MA&ixlib=rb-4.0.3&q=80&w=1080" alt="持续改进">
+                    <img src="https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="持续改进">
                 </div>
             </div>
         </div>
         
-        <div class="slide bg-cover" data-title="结尾" style="background-image: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxwaG90by1yZWxhdGVkfDE0fHx8ZW58MHx8fHx8&ixlib=rb-4.0.3&q=80&w=1920');">
+        <div class="slide bg-cover" data-title="结尾" style="background-image: url('https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');">
             <div class="overlay"></div>
             <div class="centered-content">
                 <h1>Q & A</h1>
