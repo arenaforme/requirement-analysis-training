@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>从程序员到AI应用工程师 - 需求分析与沟通技巧培训</title>
+
+    <style>
+        :root {
+            --bg-color: #050a1b;         /* 深空蓝背景 */
+            --accent-color: #00f2a1;     /* 科技薄荷绿 */
+            --text-color: #e0f7fa;       /* 浅色文本 */
+            --glass-bg: rgba(20, 30, 60, 0.75); /* 玻璃拟态背景 */
+            --glass-border: rgba(255, 255, 255, 0.15); /* 玻璃拟态边框 */
+            --contrast-red: #f25f5c;   /* 对比 - 旧 */
+            --slide-padding: 5vh 8vw;    /* 幻灯片安全内边距 */
+            --transition-speed: 0.4s;
+        }
+
+        /* --------------------------------- */
+        /* 1. 全局与核心布局 (Global & Core) */
+        /* --------------------------------- */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* 【布局铁律】: 禁用浏览器滚动条 */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            position: relative;
+        }
+
+        /* 幻灯片容器 */
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* 幻灯片基础样式 */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity var(--transition-speed) ease-in-out, visibility var(--transition-speed) linear;
+            overflow: hidden; /* 【布局铁律】: 幻灯片本身禁止滚动 */
+            padding: var(--slide-padding);
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* 默认垂直居中（用于内容少时） */
+            align-items: center; /* 默认水平居中 */
+            text-align: center;
+        }
+
+        /* 激活的幻灯片 */
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+        
+        /* --------------------------------- */
+        /* 2. PPT功能组件 (UI Controls) */
+        /* --------------------------------- */
+
+        /* 导航箭头 */
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--accent-color);
+            border: 1px solid var(--glass-border);
+            font-size: 2.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            width: 50px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            opacity: 0.4;
+            transition: all var(--transition-speed);
+            backdrop-filter: blur(5px);
+        }
+        .nav-arrow:hover {
+            opacity: 1;
+            background: var(--glass-bg);
+            border-color: var(--accent-color);
+            transform: translateY(-50%) scale(1.05);
+        }
+        #prev-slide { left: 20px; }
+        #next-slide { right: 20px; }
+        .nav-arrow:disabled {
+            opacity: 0.1;
+            cursor: not-allowed;
+            border-color: var(--glass-border);
+        }
+
+        /* 全屏按钮 */
+        #fullscreen-toggle {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 100;
+            background: var(--glass-bg);
+            color: var(--accent-color);
+            border: 1px solid var(--glass-border);
+            font-size: 1.5rem;
+            width: 45px;
+            height: 45px;
+            line-height: 45px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 50%;
+            opacity: 0.8;
+            transition: all var(--transition-speed);
+        }
+        #fullscreen-toggle:hover {
+            opacity: 1;
+            transform: scale(1.1);
+            border-color: var(--accent-color);
+        }
+
+        /* 页码 */
+        #page-number {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 100;
+            color: var(--accent-color);
+            font-size: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+        
+        /* --------------------------------- */
+        /* 3. 视觉风格 (Visual Style) */
+        /* --------------------------------- */
+
+        /* 玻璃拟态卡片 */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            text-align: left;
+            margin: 10px;
+        }
+
+        /* 封面和章节页背景 */
+        .slide.bg-cover {
+            background-size: cover;
+            background-position: center;
+        }
+        .slide.bg-cover .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 10, 27, 0.8); /* 深色蒙版 */
+            z-index: -1;
+        }
+        .slide.bg-cover .centered-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* typography */
+        h1, h2, h3 {
+            margin: 0.5em 0;
+            line-height: 1.3;
+            font-weight: 600;
+        }
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            color: var(--accent-color);
+            text-shadow: 0 0 15px rgba(0, 242, 161, 0.4);
+        }
+        h2 {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            color: var(--text-color);
+            font-weight: 400;
+            opacity: 0.9;
+        }
+        h3 {
+            font-size: clamp(1.2rem, 3vw, 1.75rem);
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        /* 封面页的 h3 */
+        .slide.bg-cover h3 {
+             font-size: clamp(1rem, 2.5vw, 1.5rem);
+             color: var(--text-color);
+             opacity: 0.8;
+             font-weight: 300;
+             margin-top: 30px;
+        }
+
+        p, li {
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            line-height: 1.7;
+            color: var(--text-color);
+            opacity: 0.9;
+        }
+        ul {
+            padding-left: 25px;
+            text-align: left;
+        }
+        li {
+            margin-bottom: 0.75em;
+        }
+        strong {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+        
+        /* --------------------------------- */
+        /* 4. 反滚动布局策略 (Anti-Scroll) */
+        /* --------------------------------- */
+
+        /* 通用内容容器 (用于Sider布局) */
+        .content-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        /* 策略1: 图文Sider */
+        .card-with-aside-image {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            height: calc(100vh - 2 * 5vh); /* 占满可用高度 */
+            gap: 30px;
+        }
+        .card-with-aside-image .card-content {
+            flex: 3; /* 文字占 3/5 */
+            height: 100%;
+            overflow-y: auto; /* 【关键】: 只允许卡片内部滚动 */
+            padding-right: 20px; /* 滚动条空间 */
+        }
+        .card-with-aside-image .aside-image {
+            flex: 2; /* 图片占 2/5 */
+            height: 100%;
+            min-width: 30%;
+            border-radius: 16px;
+            overflow: hidden;
+            background-color: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+        }
+        .card-with-aside-image .aside-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* 策略2: 卡片阵列 */
+        .multi-card-container {
+            display: flex;
+            flex-wrap: wrap; /* 自动换行 */
+            justify-content: center;
+            align-items: stretch; /* 等高 */
+            gap: 25px;
+            width: 100%;
+            max-height: calc(100vh - 2 * 5vh); /* 占满可用高度 */
+            overflow-y: auto; /* 【关键】: 只允许容器内部滚动 */
+            padding: 10px; /* 滚动条空间 */
+        }
+        .multi-card-container .card {
+            flex-basis: 300px; /* 最小宽度 */
+            flex-grow: 1;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .multi-card-container .card h3 {
+            margin-top: 0;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+        /* 6卡片布局 */
+        .multi-card-container.cols-3 .card {
+            flex-basis: calc(33.33% - 25px);
+        }
+        /* 5卡片布局 */
+        .multi-card-container.cols-5 .card {
+             flex-basis: calc(20% - 25px);
+             min-width: 200px;
+             padding: 20px;
+        }
+        .multi-card-container.cols-5 .card h3 {
+            font-size: 1.2rem;
+        }
+        .multi-card-container.cols-5 .card p,
+        .multi-card-container.cols-5 .card li {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+
+        /* 策略3: 流程卡片 */
+        .flow-card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+        }
+        .flow-step {
+            display: flex;
+            align-items: center;
+        }
+        .flow-step .card {
+            padding: 15px 25px;
+            margin: 0;
+            border: 1px solid var(--accent-color);
+            flex-shrink: 0;
+        }
+        .flow-step .arrow {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        /* 在小屏幕或换行时，隐藏最后一个箭头 */
+        .flow-step:last-child .arrow {
+            display: none;
+        }
+        
+        /* 代码/图表滚动容器 */
+        .code-container {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 45vh; /* 限制高度 */
+            overflow: auto; /* 允许垂直和水平滚动 */
+            font-family: 'Consolas', 'Menlo', 'Monaco', monospace;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        .code-container pre {
+            margin: 0;
+            padding: 0;
+            white-space: pre; /* 保持格式，允许横向滚动 */
+        }
+        .code-container .prompt {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+        .code-container .output {
+            color: #f0f0f0;
+            opacity: 0.9;
+        }
+        .code-container .comment {
+            color: #888;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="presentation-container">
+
+        <button id="prev-slide" class="nav-arrow" title="上一页">&lt;</button>
+        <button id="next-slide" class="nav-arrow" title="下一页">&gt;</button>
+
+        <div id="fullscreen-toggle" title="全屏/退出全屏">⛶</div>
+
+        <div id="page-number">1 / 31</div>
+
+        <div class="slide active bg-cover" data-title="封面" style="background-image: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxwaG90by1yZWxhdGVkfDE0fHx8ZW58MHx8fHx8&ixlib=rb-4.0.3&q=80&w=1920');">
+            <div class="overlay"></div>
+            <div class="centered-content">
+                <h1>从程序员到AI应用工程师</h1>
+                <h2>需求分析与沟通技巧培训</h2>
+                <h3>用AI赋能 · 理解真实需求 · 高效沟通</h3>
+            </div>
+        </div>
+
+        <div class="slide" data-title="课程目标">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>课程目标</h2>
+                    <ul>
+                        <li>理解需求分析的<strong>本质</strong>：区分用户需求与解决方案</li>
+                        <li>掌握<strong>系统化</strong>需求挖掘方法：5W2H、KANO模型</li>
+                        <li>学会用<strong>AI辅助</strong>需求分析：提问设计、需求整理、沟通话术</li>
+                        <li>提升需求<strong>沟通技巧</strong>：借助AI练习和优化沟通方式</li>
+                        <li>掌握AI工具在需求管理<strong>全流程</strong>的应用场景</li>
+                        <li>通过<strong>实战案例</strong>掌握AI赋能的需求分析方法</li>
+                    </ul>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8Mnx8Z29hbHN8ZW58MHx8fHwxNzE1ODg1OTQzfDA&ixlib=rb-4.0.3&q=80&w=1080" alt="课程目标">
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide" data-title="转型挑战">
+            <div class="centered-content">
+                <h2>程序员转型的挑战与AI解决方案</h2>
+                <div class="multi-card-container">
+                    <div class="card">
+                        <h3>挑战1：无法识别真实需求</h3>
+                        <p><strong>AI辅助：</strong>深度提问引导、需求分层分析</p>
+                    </div>
+                    <div class="card">
+                        <h3>挑战2：不善于沟通表达</h3>
+                        <p><strong>AI辅助：</strong>对话模拟、话术生成、实时建议</p>
+                    </div>
+                    <div class="card">
+                        <h3>挑战3：需求蔓延失控</h3>
+                        <p><strong>AI辅助：</strong>优先级评估、影响分析、拒绝话术</p>
+                    </div>
+                </div>
+                <h3>核心理念：AI是你的需求分析助手和沟通教练</h3>
+            </div>
+        </div>
+
+        <div class="slide" data-title="案例：锤子与核桃">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>经典案例：锤子与核桃</h2>
+                    <p><strong>场景：</strong>用户说 "我需要一把锤子"</p>
+                    <p><strong>问题：</strong>如果直接提供锤子，可能不是最佳方案</p>
+                    <h3>AI辅助分析演示 (5 Why)</h3>
+                    <div class="code-container">
+                        <pre>
+<span class="prompt">Prompt:</span> "用户说需要锤子，帮我用5个Why分析真实需求"
+
+<span class="output">AI输出:</span>
+Why 1: 为什么需要锤子？ → 打开硬壳
+Why 2: 为什么要打开硬壳？ → 吃核桃
+Why 3: 为什么要吃核桃？ → 补充营养
+Why 4: 为什么要补充营养？ → 保持健康
+Why 5: ... (真实需求)
+
+<span class="comment">真实需求：</span>获取核桃仁
+<span class="comment">更好方案：</span>核桃钳、剥壳服务、已去壳核桃
+                        </pre>
+                    </div>
+                    <p><strong>启示：</strong>用AI帮你系统化思考，避免思维盲区</p>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1628124707159-55931b6c6b44?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8MXx8d2FsbnV0fGVufDB8fHx8MTcxNTg4NjE1N3ww&ixlib=rb-4.0.3&q=80&w=1080" alt="核桃">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-title="AI六大应用场景">
+            <div class="centered-content">
+                <h2>AI在需求分析中的六大应用场景</h2>
+                <div class="multi-card-container cols-3">
+                    <div class="card"><h3>1. 需求准备</h3><p>生成访谈提纲、准备问题清单</p></div>
+                    <div class="card"><h3>2. 需求挖掘</h3><p>实时提供追问建议、记录要点</p></div>
+                    <div class="card"><h3>3. 需求分析</h3><p>5W2H分析、KANO分类、优先级排序</p></div>
+                    <div class="card"><h3>4. 需求验证</h3><p>生成确认文档、检查遗漏</p></div>
+                    <div class="card"><h3>5. 需求沟通</h3><p>话术优化、冲突调解方案</p></div>
+                    <div class="card"><h3>6. 需求管理</h3><p>变更评估、拒绝话术、文档生成</p></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide bg-cover" data-title="章节页2" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8Mnx8ZGF0YSUyMGFuYWx5c2lzfGVufDB8fHx8MTcxNTg4NjIyN3ww&ixlib=rb-4.0.3&q=80&w=1920');">
+            <div class="overlay"></div>
+            <div class="centered-content">
+                <h2>第二部分</h2>
+                <h1>AI赋能的需求挖掘方法论</h1>
+            </div>
+        </div>
+        
+        <div class="slide" data-title="需求的三个层次">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>需求的三个层次与AI分析</h2>
+                    <ul>
+                        <li><strong>表层需求：</strong>用户直接说出的 (我要一个搜索框)</li>
+                        <li><strong>期望需求：</strong>用户期望达成的目标 (快速找到信息)</li>
+                        <li><strong>真实需求：</strong>用户内心真正的痛点 (信息获取效率低)</li>
+                    </ul>
+                    <h3>AI辅助工具实操</h3>
+                    <div class="code-container">
+                        <pre>
+<span class="prompt">Prompt模板:</span>
+"分析这个需求的三个层次：
+ [用户需求：我想要一个搜索框]"
+
+<span class="output">AI输出:</span>
+- 表层：搜索框
+- 期望：快速找到信息
+- 真实：信息获取效率低
+...
+<span class="comment">AI帮你识别表层与深层需求的差异</span>
+                        </pre>
+                    </div>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1573495783078-30b35f10438b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8MTF8fGljZWJlcmd8ZW58MHx8fHwxNzE1ODg2MzI4fDA&ixlib=rb-4.0.3&q=80&w=1080" alt="需求的三个层次">
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide" data-title="5W2H分析法">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>5W2H分析法 + AI助手</h2>
+                    <p><strong>传统方法：</strong>手动思考7个维度</p>
+                    <h3>AI增强方法</h3>
+                    <ol>
+                        <li><strong>Prompt：</strong>"用5W2H分析这个需求：[需求描述]"</li>
+                        <li>AI生成完整分析框架</li>
+                        <li>你补充具体信息</li>
+                        <li>AI帮你发现遗漏的维度</li>
+                    </ol>
+                    <div class="card" style="border-color: var(--accent-color);">
+                        <h3>现场演示</h3>
+                        <p>输入一个模糊需求，看AI如何生成完整的5W2H分析</p>
+                    </div>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8NHx8bWluZCUyMG1hcHxlbnwwfHx8fDE3MTU4ODY0MDJ8MA&ixlib=rb-4.0.3&q=80&w=1080" alt="5W2H分析法">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-title="5W2H实战">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>5W2H实战：AI辅助案例分析</h2>
+                    <p><strong>场景：</strong>用户说 "增加AI聊天功能" (需求很模糊)</p>
+                    <p><strong>第一步：</strong>用AI生成分析框架</p>
+                    <div class="code-container">
+<pre><span class="prompt">Prompt:</span> "这个需求很模糊，请帮我用5W2H
+设计10个澄清问题"</pre>
+                    </div>
+                    <p><strong>第二步：AI生成的问题示例</strong></p>
+                    <ul>
+                        <li><strong>Why：</strong>为什么需要聊天功能？要解决什么业务问题？ROI预期？</li>
+                        <li><strong>What：</strong>聊天的具体功能边界？支持哪些问题类型？</li>
+                        <li><strong>Who：</strong>谁会使用？使用频率？技术水平如何？</li>
+                        <li><strong>When：</strong>期望上线时间？是否有关键时间节点？</li>
+                        <li><strong>Where：</strong>在哪些平台使用？使用场景是什么？</li>
+                        <li><strong>How：</strong>技术实现方式？数据来源？</li>
+                        <li><strong>How much：</strong>预算？用户量？成功指标？</li>
+                    </ul>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1553775282-20af80779714?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8Nnx8Y2hhdGJvdHxlbnwwfHx8fDE3MTU4ODY0ODJ8MA&ixlib=rb-4.0.3&q=80&w=1080" alt="AI聊天">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-title="KANO模型">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>KANO模型介绍与AI分类</h2>
+                    <p><strong>传统方法：</strong>通过问卷调研人工分类</p>
+                    <h3>AI增强方法</h3>
+                    <ul>
+                        <li><strong>快速分类：</strong>输入功能列表，AI初步分类</li>
+                        <li><strong>Prompt：</strong>"将以下功能按KANO模型分类：[功能清单]"</li>
+                        <li><strong>验证调整：</strong>结合实际情况微调</li>
+                    </ul>
+                    <p><strong>好处：</strong>快速起草，节省80%时间，程序员不再害怕做分类</p>
+                </div>
+                <div class="aside-image">
+                    <img src="https://i.imgur.com/8Q1mHqW.png" alt="KANO模型">
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide" data-title="KANO五类需求">
+            <div class="centered-content">
+                <h2>KANO模型的五类需求</h2>
+                <div class="multi-card-container cols-5">
+                    <div class="card"><h3>必备型</h3><p>(Must-be) 系统稳定、数据安全</p></div>
+                    <div class="card"><h3>期望型</h3><p>(Performance) 响应速度、准确率</p></div>
+                    <div class="card"><h3>兴奋型</h3><p>(Attractive) 智能推荐、个性化</p></div>
+                    <div class="card"><h3>无差异型</h3><p>(Indifferent) 花哨但不实用的功能</p></div>
+                    <div class="card"><h3>反向型</h3><p>(Reverse) 强制广告、复杂流程</p></div>
+                </div>
+                <h3><strong>AI实践技巧：</strong>让AI解释为什么某个功能属于某个类别</h3>
+            </div>
+        </div>
+
+        <div class="slide" data-title="KANO优先级">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>AI辅助的KANO优先级决策</h2>
+                    <p><strong>输入：</strong>所有需求列表和业务背景</p>
+                    <p><strong>AI分析内容：</strong></p>
+                    <ul>
+                        <li>按KANO分类</li>
+                        <li>评估每个需求的实现成本</li>
+                        <li>计算性价比</li>
+                        <li>推荐MVP功能组合</li>
+                    </ul>
+                    <div class="code-container">
+<pre><span class="prompt">Prompt:</span> "作为产品经理，帮我分析这些需求
+的优先级：[需求列表]，考虑因素：开发
+周期3个月，团队5人"
+
+<span class="output">AI输出:</span>
+- (可视化的优先级矩阵和建议)
+</pre>
+                    </div>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8N3x8cHJpb3JpdHl8ZW58MHx8fHwxNzE1ODg2NzQ1fDA&ixlib=rb-4.0.3&q=80&w=1080" alt="优先级">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-title="AI生成用户故事">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>AI生成用户故事</h2>
+                    <p><strong>传统方法：</strong>手写用户故事，表达不专业</p>
+                    <h3>AI辅助方法</h3>
+                    <p><strong>输入：</strong>功能描述</p>
+                    <div class="code-container">
+<pre><span class="prompt">Prompt:</span> "将这个功能转换为标准用户
+故事格式：[数据报表自动生成]"
+
+<span class="output">AI输出:</span>
+"作为 <strong>[数据分析师]</strong>,
+ 我想要 <strong>[系统每周一自动生成销售报表]</strong>,
+ 以便 <strong>[节省2小时的手工整理时间，
+ 提前发现业务趋势]</strong>"
+</pre>
+                    </div>
+                    <p><strong>好处：</strong>规范化、业务价值清晰</p>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8MTV8fHdvcmtzaG9wfGVufDB8fHx8MTcxNTg4Njc4N3ww&ixlib=rb-4.0.3&q=80&w=1080" alt="用户故事">
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide" data-title="AI设计访谈问题">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>AI辅助设计访谈问题</h2>
+                    <p><strong>程序员痛点：</strong>不知道该问什么，问题太技术化</p>
+                    <h3>AI解决方案</h3>
+                    <div class="code-container">
+<pre><span class="prompt">Prompt:</span> "我要访谈[用户角色]关于[主题]，
+帮我设计15个访谈问题，包括开放式、
+场景化和追问类问题"</pre>
+                    </div>
+                    <p><strong>AI生成的问题类型：</strong></p>
+                    <ul>
+                        <li><strong>开放式：</strong>"请描述您日常工作中最耗时的环节"</li>
+                        <li><strong>场景化：</strong>"上次遇到X问题时，您是如何处理的？"</li>
+                        <li><strong>追问：</strong>"为什么这个环节特别重要？"</li>
+                        <li><strong>优先级：</strong>"如果只能改进一个地方，您会选哪个？"</li>
+                    </ul>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8M3x8aW50ZXJ2aWV3fGVufDB8fHx8MTcxNTg4Njg1MXww&ixlib=rb-4.0.3&q=80&w=1080" alt="访谈">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-title="STAR访谈分析">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>AI辅助的STAR访谈分析</h2>
+                    <p><strong>访谈后的难题：</strong>信息太多，不知道如何提炼</p>
+                    <h3>AI整理工具</h3>
+                    <div class="code-container">
+<pre><span class="prompt">Prompt:</span> "用STAR方法整理这段访谈，
+提取关键需求：[访谈内容]"
+
+<span class="output">AI输出 (STAR):</span>
+<strong>S (Situation)：</strong>用户所处情境
+<strong>T (Task)：</strong>用户任务目标
+<strong>A (Action)：</strong>当前采取的行动 (痛点所在)
+<strong>R (Result)：</strong>结果和不满之处
+
+<span class="comment">需求提炼：</span>3-5条核心需求
+</pre>
+                    </div>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8MTF8fGFuYWx5c2lzfGVufDB8fHx8MTcxNTg4Njk0Mnww&ixlib=rb-4.0.3&q=80&w=1080" alt="STAR分析">
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide" data-title="AI应用需求的特殊性">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>AI辅助分析AI应用需求的特殊性</h2>
+                    <p><strong>问题：</strong>用户对AI期望不明确怎么办？</p>
+                    <h3>AI帮你设定合理预期</h3>
+                    <div class="code-container">
+<pre><span class="prompt">Prompt:</span> "用户希望AI客服能回答所有问题，
+帮我分析可行性和风险，并生成期望管理话术"
+
+<span class="output">AI输出:</span>
+- 技术可行性分析 (准确率预期：85-90%)
+- 需要的数据和成本
+- 风险和限制
+- <span class="prompt">沟通话术:</span> "目前AI技术可以做到...，
+  但在...方面还有限制，我们建议..."
+</pre>
+                    </div>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1620712943543-26fc7ee3c75f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8MTZ8fGFpfGVufDB8fHx8MTcxNTg4NzAwNnww&ixlib=rb-4.0.3&q=80&w=1080" alt="AI需求">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-title="AI模拟对话">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>AI模拟需求对话练习</h2>
+                    <p><strong>问题：</strong>程序员缺乏沟通经验怎么办？</p>
+                    <h3>AI角色扮演训练</h3>
+                    <div class="code-container">
+<pre><span class="prompt">Prompt:</span> "你扮演一个[挑剔的产品经理]，
+我来练习需求访谈，你按照这个角色的
+特点回答我的问题..."</pre>
+                    </div>
+                    <p><strong>练习目标：</strong>在安全环境中反复练习，提升应变能力</p>
+                    <p><strong>AI反馈：</strong>访谈结束后，让AI评价你的提问质量和改进建议</p>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1557853197-aefb056b6123?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8N3x8cm9sZXBsYXl8ZW58MHx8fHwxNzE1ODg3MDYyfDA&ixlib=rb-4.0.3&q=80&w=1080" alt="AI模拟对话">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide bg-cover" data-title="章节页3" style="background-image: url('https://images.unsplash.com/photo-1554224154-26032ffc0d07?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8MTB8fGNvbW11bmljYXRpb258ZW58MHx8fHwxNzE1ODg3MDk4fDA&ixlib=rb-4.0.3&q=80&w=1920');">
+            <div class="overlay"></div>
+            <div class="centered-content">
+                <h2>第三部分</h2>
+                <h1>AI赋能的需求沟通技巧</h1>
+            </div>
+        </div>
+
+        <div class="slide" data-title="AI辅助倾听">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>AI辅助提升倾听和理解</h2>
+                    <p><strong>会议记录难题：</strong>边听边记，容易遗漏</p>
+                    <h3>AI解决方案</h3>
+                    <ul>
+                        <li><strong>实时转录：</strong>用AI工具 (如Otter.ai、飞书妙记) 记录会议</li>
+                        <li><strong>会后整理 (Prompt)：</strong></li>
+                    </ul>
+                    <div class="code-container">
+<pre><span class="prompt">Prompt:</span> "总结这段会议记录的关键需求点
+和待确认事项：[会议内容]"</pre>
+                    </div>
+                    <ul>
+                        <li><strong>AI提炼：</strong>自动标注关键信息、待办事项、风险点</li>
+                    </ul>
+                    <p><strong>好处：</strong>专注倾听，不再担心漏记信息</p>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8NHx8b25saW5lJTIwbWVldGluZ3xlbnwwfHx8fDE3MTU4ODcxNTF8MA&ixlib=rb-4.0.3&q=80&w=1080" alt="会议记录">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-title="AI生成沟通策略">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>AI生成针对不同用户的沟通策略</h2>
+                    <p><strong>输入：</strong>用户类型和沟通目标</p>
+                    <div class="code-container">
+<pre><span class="prompt">Prompt:</span> "这个用户是[沉默型]，我需要
+[了解XX需求]，给我沟通策略和话术"
+
+<span class="output">AI输出示例 (沉默型):</span>
+- 5个开放式破冰问题
+- "我注意到您在...操作上停留了很久，
+  能分享下您的想法吗？"
+</pre>
+                    </div>
+                    <p><strong>AI可应对：</strong>话多型、沉默型、技术型、业务型</p>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8Nnx8bmVnb3RpYXRpb258ZW58MHx8fHwxNzE1ODg3MjAzfDA&ixlib=rb-4.0.3&q=80&w=1080" alt="沟通策略">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-title="AI辅助需求确认">
+            <div class="centered-content">
+                <h2>AI辅助需求确认和文档化</h2>
+                <p>程序员痛点：需求理解有偏差，文档写得太技术化</p>
+                <h3>AI三步确认法</h3>
+                <div class="flow-card-container">
+                    <div class="flow-step">
+                        <div class="card"><p><strong>第一步</strong><br>AI总结业务语言</p></div>
+                        <div class="arrow">→</div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="card"><p><strong>第二步</strong><br>发给用户确认</p></div>
+                        <div class="arrow">→</div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="card"><p><strong>第三步</strong><br>AI转换技术文档</p></div>
+                        <div class="arrow"></div>
+                    </div>
+                </div>
+                <h3>好处：自动生成双语言版本 (业务语言 + 技术语言)</h3>
+            </div>
+        </div>
+
+        <div class="slide" data-title="AI生成引导性问题">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>AI辅助生成引导性问题</h2>
+                    <p><strong>程序员常犯错误：</strong>直接问 "您需要什么功能？"</p>
+                    <h3>AI生成更好的问题 (从痛点出发)</h3>
+                    <div class="code-container">
+<pre><span class="prompt">Prompt:</span> "我不要直接问用户需要什么功能，
+帮我生成5个从痛点出发的引导性问题"
+
+<span class="output">AI输出:</span>
+1. "您目前完成X任务时，最耗时的环节是？"
+2. "上周有没有因为Y问题影响工作？"
+3. "如果有一个魔法按钮能解决一个问题..."
+4. "您现在用什么变通方法应对Z情况？"
+5. "您最理想的工作流程是怎样的？"
+</pre>
+                    </div>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8OHx8cXVlc3Rpb258ZW58MHx8fHwxNzE1ODg3MzMyfDA&ixlib=rb-4.0.3&q=80&w=1080" alt="提问">
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide" data-title="AI处理需求冲突">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>AI辅助处理需求冲突</h2>
+                    <p><strong>问题：</strong>多方需求矛盾时不知道如何平衡？</p>
+                    <h3>AI决策支持</h3>
+                    <div class="code-container">
+<pre><span class="prompt">Prompt:</span> "分析这两个需求的冲突点，
+给出3个可能的解决方案：[冲突描述]"
+
+<span class="output">AI输出:</span>
+- <strong>冲突根本原因分析：</strong>...
+- <strong>方案1：</strong>技术方案兼容 (成本评估)
+- <strong>方案2：</strong>分阶段实现 (优先级建议)
+- <strong>方案3：</strong>双方妥协方案 (各让一步)
+- (每个方案的利弊分析和推荐话术)
+</pre>
+                    </div>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1529007185502-7c6c6835d51b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8M3x8Y29uZmxpY3R8ZW58MHx8fHwxNzE1ODg3Mzc2fDA&ixlib=rb-4.0.3&q=80&w=1080" alt="冲突">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-title="AI生成期望管理话术">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>AI生成期望管理话术</h2>
+                    <p><strong>难题：</strong>如何拒绝或推迟不合理需求，又不得罪人？</p>
+                    <h3>AI话术生成器</h3>
+                    <div class="code-container">
+<pre><span class="prompt">Prompt:</span> "用户要求[不合理需求]，帮我生成
+3种委婉拒绝的话术，说明原因但不伤害关系"
+
+<span class="output">AI话术1 (技术约束):</span>
+"这个功能技术上可行，但需要3周开发，
+会影响核心功能X的上线..."
+
+<span class="output">AI话术2 (数据支持):</span>
+"我们调研了100个用户，只有8%提到这个
+需求，投入产出比较低，建议优先做Y"
+
+<span class="output">AI话术3 (替代方案):</span>
+"您看这样实现是否也能达到目的..."
+</pre>
+                    </div>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1522881193467-46323c396d74?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8MTF8fGJhbGFuY2V8ZW58MHx8fHwxNzE1ODg3NDEzfDA&ixlib=rb-4.0.3&q=80&w=1080" alt="期望管理">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-title="AI自动生成需求文档">
+            <div class="centered-content">
+                <h2>AI自动生成需求文档</h2>
+                <p>程序员写文档效率低、格式不规范</p>
+                <h3>AI文档生成流程</h3>
+                <div class="flow-card-container">
+                    <div class="flow-step">
+                        <div class="card"><p><strong>第一步</strong><br>喂给AI结构化信息</p></div>
+                        <div class="arrow">→</div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="card"><p><strong>第二步</strong><br>AI生成初稿</p></div>
+                        <div class="arrow">→</div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="card"><p><strong>第三步</strong><br>人工审核和补充</p></div>
+                        <div class="arrow"></div>
+                    </div>
+                </div>
+                <h3>输出：专业规范的需求文档，30分钟 → 3分钟</h3>
+            </div>
+        </div>
+
+        <div class="slide" data-title="AI辅助多语言沟通">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>AI辅助多语言沟通</h2>
+                    <p>技术语言 vs 业务语言的转换</p>
+                    <h3>AI翻译助手</h3>
+                    
+                    <div class="code-container">
+<pre><span class="prompt">Prompt (技术 → 业务):</span>
+"把这段技术描述翻译成业务人员能理解的语言：
+[使用Redis做缓存，将API响应时间从2秒降到200ms]"
+
+<span class="output">AI输出:</span>
+"让系统反应速度提升10倍，用户点击后
+立即看到结果，不用等待"
+</pre>
+                    </div>
+                    
+                    <div class="code-container">
+<pre><span class="prompt">Prompt (业务 → 技术):</span>
+"把这个业务需求转换为技术实现要点：[业务需求]"
+</pre>
+                    </div>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1543286386-713bdd548da4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8NHx8dHJhbnNsYXRlfGVufDB8fHx8MTcxNTg4NzUxMHww&ixlib=rb-4.0.3&q=80&w=1080" alt="多语言沟通">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide bg-cover" data-title="章节页4" style="background-image: url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8M3x8cHJvamVjdCUyMG1hbmFnZW1lbnR8ZW58MHx8fHwxNzE1ODg3NTQxfDA&ixlib=rb-4.0.3&q=80&w=1920');">
+            <div class="overlay"></div>
+            <div class="centered-content">
+                <h2>第四部分</h2>
+                <h1>AI赋能的需求管理</h1>
+            </div>
+        </div>
+        
+        <div class="slide" data-title="需求蔓延">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>什么是需求蔓延与AI预警</h2>
+                    <p><strong>定义：</strong>项目进行中不断新增需求，范围失控</p>
+                    <h3>AI预警系统</h3>
+                    <p><strong>定期输入：</strong>当前需求列表 + 新增需求</p>
+                    <div class="code-container">
+<pre><span class="prompt">Prompt:</span> "分析这些新增需求是否导致
+需求蔓延，给出风险评估：[需求变化]"
+
+<span class="output">AI输出:</span>
+- 范围扩大比例：已增长35%
+- 时间影响：预计延期2周
+- 风险等级：⚠️ 高风险
+- <span class="prompt">应对建议:</span> 冻结需求 or 砍掉低优先级功能
+</pre>
+                    </div>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8MTR8fHByb2plY3QlMjBtYW5hZ2VtZW50fGVufDB8fHx8MTcxNTg4NzYwNnww&ixlib=rb-4.0.3&q=80&w=1080" alt="需求蔓延">
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide" data-title="变更影响分析">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>AI辅助需求变更影响分析</h2>
+                    <p><strong>问题：</strong>用户提了新需求，如何快速评估影响？</p>
+                    <h3>AI影响分析工具</h3>
+                    <div class="code-container">
+<pre><span class="prompt">Prompt:</span> "评估新增需求的影响：
+新需求[...]，当前进度[...]，
+团队规模[...]，deadline[...]"
+
+<span class="output">AI输出:</span>
+- 开发工作量：8人天
+- 测试工作量：3人天
+- 对现有功能的影响：需要修改模块A、B
+- 时间延期：5-7天
+- 风险：可能影响已承诺的X功能
+- <span class="prompt">决策建议:</span> 不建议接受，或延后到二期
+</pre>
+                    </div>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1542626991-cbc4e32524cc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8Nnx8cmlza3xlbnwwfHx8fDE3MTU4ODc2NTV8MA&ixlib=rb-4.0.3&q=80&w=1080" alt="影响分析">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-title="变更管理文档">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>AI生成变更管理文档</h2>
+                    <p><strong>问题：</strong>需求变更流程繁琐，程序员不爱做记录</p>
+                    <h3>AI自动化流程</h3>
+                    <div class="code-container">
+<pre><span class="prompt">Prompt:</span> "生成需求变更申请文档：
+变更内容[...]，变更原因[...]，
+影响分析[...]"
+
+<span class="output">AI生成:</span>
+- 变更申请表
+- 影响评估报告
+- 需要的相关方审批清单
+- 变更后的项目计划调整
+</pre>
+                    </div>
+                    <p><strong>好处：</strong>从手工30分钟缩短到3分钟</p>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8N3x8ZG9jdW1lbnR8ZW58MHx8fHwxNzE1ODg3NzA4fDA&ixlib=rb-4.0.3&q=80&w=1080" alt="文档">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-title="拒绝需求的话术">
+            <div class="centered-content">
+                <h2>AI生成拒绝需求的专业话术</h2>
+                <p>最难的环节：如何说"不"而不得罪人</p>
+                <div class="multi-card-container">
+                    <div class="card">
+                        <h3>场景1：功能不在范围内</h3>
+                        <p>"这个功能确实很有价值，但超出了我们这期的项目范围。我建议记录到需求池，在下一个版本评估，可以吗？"</p>
+                    </div>
+                    <div class="card">
+                        <h3>场景2：时间不允许</h3>
+                        <p>"这个需求需要2周开发，会导致我们延期交付核心功能X。有两个选择：1）推迟到二期 2）砍掉功能Y来换时间。您倾向哪个？"</p>
+                    </div>
+                    <div class="card">
+                        <h3>场景3：投入产出比低</h3>
+                        <p>"我们分析了数据，这个功能只有5%的用户会用，但需要占用20%的开发时间。建议优先做80%用户需要的功能Z，您觉得呢？"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide" data-title="需求优先级矩阵">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>AI辅助需求优先级矩阵</h2>
+                    <p><strong>问题：</strong>多个需求不知道先做哪个？</p>
+                    <h3>AI决策工具</h3>
+                    <div class="code-container">
+<pre><span class="prompt">Prompt:</span> "用价值/成本矩阵分析这些需求
+的优先级：[需求列表]，考虑因素：
+用户影响[...]，技术难度[...]，
+战略重要性[...]"
+
+<span class="output">AI输出:</span>
+- 四象限矩阵 (高价值/低成本...)
+- 优先级排序：1-10
+- <span class="prompt">决策建议:</span> 优先做高价值低成本的速赢项目
+</pre>
+                    </div>
+                    <p><strong>可视化：</strong>AI生成表格，可直接放入汇报文档</p>
+                </div>
+                <div class="aside-image">
+                    <img src="https://i.imgur.com/3Z6p3Jc.png" alt="优先级矩阵">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" data-title="持续改进">
+            <div class="card-with-aside-image">
+                <div class="card card-content">
+                    <h2>持续改进：AI助手使用技巧总结</h2>
+                    <h3>核心原则：AI是助手，不是替代品</h3>
+                    <ul>
+                        <li>AI生成初稿，<strong>人工审核调整</strong></li>
+                        <li>AI提供思路，<strong>你做最终决策</strong></li>
+                        <li>AI辅助沟通，但<strong>真诚来自你</strong></li>
+                    </ul>
+                    <h3>必备AI工具清单</h3>
+                    <ul>
+                        <li><strong>通用：</strong>ChatGPT / Claude / 文心一言</li>
+                        <li><strong>会议记录：</strong>Otter / 飞书妙记 / 腾讯会议AI</li>
+                        <li><strong>文档协作：</strong>Notion AI / 飞书AI</li>
+                    </ul>
+                    <h3>行动计划</h3>
+                    <ul>
+                        <li><strong>本周：</strong>选择一个AI工具，尝试3个场景</li>
+                        <li><strong>本月：</strong>建立你的个人Prompt模板库</li>
+                        <li><strong>持续：</strong>每次需求分析都用AI辅助，形成习惯</li>
+                    </ul>
+                </div>
+                <div class="aside-image">
+                    <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxzZWFyY2h8M3x8dGVjaG5vbG9neXxlbnwwfHx8fDE3MTU4ODc4ODJ8MA&ixlib=rb-4.0.3&q=80&w=1080" alt="持续改进">
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide bg-cover" data-title="结尾" style="background-image: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNzEyMywxMjA3fDB8MXxwaG90by1yZWxhdGVkfDE0fHx8ZW58MHx8fHx8&ixlib=rb-4.0.3&q=80&w=1920');">
+            <div class="overlay"></div>
+            <div class="centered-content">
+                <h1>Q & A</h1>
+                <h2>感谢聆听</h2>
+            </div>
+        </div>
+
+
+    </div> <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // --- 1. 状态与DOM元素 ---
+            let currentSlide = 0;
+            const slides = document.querySelectorAll('.slide');
+            const totalSlides = slides.length;
+            
+            const prevButton = document.getElementById('prev-slide');
+            const nextButton = document.getElementById('next-slide');
+            const fullscreenButton = document.getElementById('fullscreen-toggle');
+            const pageNumberElement = document.getElementById('page-number');
+
+            // --- 2. 核心功能函数 ---
+
+            /**
+             * 显示指定索引的幻灯片
+             * @param {number} index - 幻灯片索引 (0-based)
+             */
+            function showSlide(index) {
+                // 边界检查
+                if (index < 0 || index >= totalSlides) {
+                    return;
+                }
+
+                // 更新当前幻灯片状态
+                slides[currentSlide].classList.remove('active');
+                slides[index].classList.add('active');
+                currentSlide = index;
+
+                // 更新页码
+                pageNumberElement.textContent = `${currentSlide + 1} / ${totalSlides}`;
+
+                // 更新按钮禁用状态
+                prevButton.disabled = (currentSlide === 0);
+                nextButton.disabled = (currentSlide === totalSlides - 1);
+            }
+
+            /**
+             * 切换全屏/退出全屏
+             */
+            function toggleFullScreen() {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen()
+                        .catch(err => {
+                            console.error(`进入全屏失败: ${err.message} (${err.name})`);
+                        });
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    }
+                }
+            }
+
+            // --- 3. 事件监听 ---
+
+            // 按钮点击
+            prevButton.addEventListener('click', () => {
+                showSlide(currentSlide - 1);
+            });
+
+            nextButton.addEventListener('click', () => {
+                showSlide(currentSlide + 1);
+            });
+
+            // 全屏按钮
+            fullscreenButton.addEventListener('click', toggleFullScreen);
+
+            // 键盘导航
+            document.addEventListener('keydown', (e) => {
+                // 忽略在输入框或文本域中的按键
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) {
+                    return;
+                }
+
+                if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { // 下一页
+                    e.preventDefault();
+                    showSlide(currentSlide + 1);
+                } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { // 上一页
+                    e.preventDefault();
+                    showSlide(currentSlide - 1);
+                }
+            });
+
+            // --- 4. 初始化 ---
+            // 初始显示第一页并设置按钮状态
+            showSlide(0);
+        });
+    </script>
+
+</body>
+</html>
